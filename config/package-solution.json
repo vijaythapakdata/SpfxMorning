@@ -1,0 +1,41 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "training-client-side-solution",
+    "id": "36229376-81b7-4aeb-8e4f-3b0d9da85dcb",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "Vijay Thapak",
+      "websiteUrl": "https//wwww.gooogle.com",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    
+    "metadata": {
+      "shortDescription": {
+        "default": "Training description"
+      },
+      "longDescription": {
+        "default": "Training description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "training Feature",
+        "description": "The feature that activates elements of the training solution.",
+        "id": "cbff503c-968a-4353-b4dd-39b0f980966a",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/training.sppkg"
+  }
+}
