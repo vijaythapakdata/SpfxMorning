@@ -6,4 +6,6 @@ ListName:string;
 context:WebPartContext;
 DepartmentOptions:any;
 GenderOptions:any;
+SkillsOptions:any;
+CityOptions:any;
 }

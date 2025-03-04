@@ -5,10 +5,29 @@ import { ISampleFormState } from './ISampleFormState';
 import { Web } from '@pnp/sp/webs';
 import "@pnp/sp/items";
 import "@pnp/sp/lists";
-import { ChoiceGroup, Dropdown, PrimaryButton, TextField } from '@fluentui/react';
+import { ChoiceGroup, DatePicker, Dropdown, IDatePickerStrings, IDropdownOption, PrimaryButton, TextField } from '@fluentui/react';
 import {PeoplePicker,PrincipalType} from "@pnp/spfx-controls-react/lib/PeoplePicker";
 // import { escape } from '@microsoft/sp-lodash-subset';
-
+export const DatePickerString:IDatePickerStrings={
+  months:["January","February","March","April","May","June","July","August","September","October","November","December"],
+  shortMonths:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+  days:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+  shortDays:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+  goToToday:"go to today",
+  nextYearAriaLabel:"go to next year",
+  prevYearAriaLabel:"go to previous year",
+  nextMonthAriaLabel:"go to next month",
+  prevMonthAriaLabel:"go to previous month"
+}
+export const FormateDate=(date:any):string=>{
+  var date1=new Date(date);
+  var year=date1.getFullYear();
+  var month=(1+date1.getMonth()).toString();
+  month=month.length>1?month:'0'+month;
+  var day=date1.getDate().toString();
+  day=day.length>1?day:'0'+day;
+  return month+'/'+day+'/'+year
+}
 export default class SampleForm extends React.Component<ISampleFormProps,ISampleFormState> {
   constructor(props:any){
     super(props);
@@ -20,7 +39,10 @@ export default class SampleForm extends React.Component<ISampleFormProps,ISample
       ManagerId:[],
       Address:"",
       Department:"",
-      Gender:""
+      Gender:"",
+      Skills:[],
+      City:"",
+      DOB:""
     }
   }
   //Create Data
@@ -34,7 +56,10 @@ export default class SampleForm extends React.Component<ISampleFormProps,ISample
       ManagerId:{results:this.state.ManagerId},
       Address:this.state.Address,
       Department:this.state.Department,
-      Gender:this.state.Gender
+      Gender:this.state.Gender,
+      Skills:{results:this.state.Skills},
+      CityId:this.state.City,
+      DOB:new Date(this.state.DOB)
     }).then((data)=>{
       console.log("No Error found");
       alert("data has been saved successfully");
@@ -51,7 +76,9 @@ export default class SampleForm extends React.Component<ISampleFormProps,ISample
       ManagerId:[],
       Address:"",
       Department:"",
-      Gender:""
+      Gender:"",
+      Skills:[],
+      City:""
     });
   }
 
@@ -59,6 +86,11 @@ export default class SampleForm extends React.Component<ISampleFormProps,ISample
 
   private handleChange=(FieldValue:keyof ISampleFormState,value:string |boolean|number):void=>{
     this.setState({[FieldValue]:value}as unknown as Pick<ISampleFormState,keyof ISampleFormState>)
+  }
+  //Mulitple Selection Dropdown
+  private onSkillsChange=(event:React.FormEvent<HTMLInputElement>,options:IDropdownOption):void=>{
+    const selectedKey=options.selected?[...this.state.Skills,options.key as string]:this.state.Skills.filter((key:any)=>key!==options.key);
+    this.setState({Skills:selectedKey})
   }
   public render(): React.ReactElement<ISampleFormProps> {
    
@@ -106,6 +138,25 @@ export default class SampleForm extends React.Component<ISampleFormProps,ISample
      onChange={(_,options)=>this.handleChange("Gender",options?.key as string||"")}
      selectedKey={this.state.Gender}
      label='Gender'
+     />
+     <Dropdown options={this.props.SkillsOptions}
+     defaultSelectedKeys={this.state.Skills}
+     multiSelect
+     onChange={this.onSkillsChange}
+     label='Skills'
+     />
+     <Dropdown
+     options={this.props.CityOptions}
+     selectedKey={this.state.City}
+     onChange={(_,Options)=>this.handleChange("City",Options?.key as string ||"")}
+     label='City'
+     />
+     <DatePicker
+     label='DOB'
+     onSelectDate={(e)=>this.setState({DOB:e})}
+     value={this.state.DOB}
+     formatDate={FormateDate}
+     strings={DatePickerString}
      />
      <br/>
      <PrimaryButton text='Save' onClick={()=>this.createData()} iconProps={{iconName:'save'}}/>

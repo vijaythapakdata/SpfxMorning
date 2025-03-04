@@ -14,6 +14,7 @@ import { ISampleFormProps } from './components/ISampleFormProps';
 
 export interface ISampleFormWebPartProps {
   ListName: string;
+  CityOptions:any;
 }
 
 export default class SampleFormWebPart extends BaseClientSideWebPart<ISampleFormWebPartProps> {
@@ -23,7 +24,8 @@ export default class SampleFormWebPart extends BaseClientSideWebPart<ISampleForm
       sp.setup({
         spfxContext:this.context as any
 
-      })
+      });
+      this._getLookupValue();
     });
   }
   public async render(): Promise<void> {
@@ -34,7 +36,9 @@ export default class SampleFormWebPart extends BaseClientSideWebPart<ISampleForm
         siteurl:this.context.pageContext.web.absoluteUrl,
         context:this.context,
         DepartmentOptions:await this.getChoiceValues(this.context.pageContext.web.absoluteUrl,"Department"),
-        GenderOptions:await this.getChoiceValues(this.context.pageContext.web.absoluteUrl,"Gender")
+        GenderOptions:await this.getChoiceValues(this.context.pageContext.web.absoluteUrl,"Gender"),
+        SkillsOptions:await this.getChoiceValues(this.context.pageContext.web.absoluteUrl,"Skills"),
+        CityOptions:this.properties.CityOptions
       }
     );
 
@@ -96,6 +100,32 @@ export default class SampleFormWebPart extends BaseClientSideWebPart<ISampleForm
 console.error("Error ")
 throw err;
 
+    }
+  }
+  //Get Lookup value
+  private async _getLookupValue():Promise<void>{
+    try{
+const response=await fetch(`${this.context.pageContext.web.absoluteUrl}/_api/web/lists/getbytitle('Cities')/items?$select=Title,ID`,
+  {
+    method:'GET',
+    headers:{
+       'Accept':'application/json;odata=nometadata'
+    }
+  }
+)
+if(!response.ok){
+  throw new Error(`Error found while fetching choice field : ${response.status}-${response.text}`);
+}
+const data=await response.json();
+const cityval=data.value.map((city:{ID:string,Title:string})=>({
+  key:city.ID,
+  text:city.Title
+}));
+this.properties.CityOptions=cityval
+    }
+    catch(err){
+console.error("Errors");
+throw err;
     }
   }
 }
