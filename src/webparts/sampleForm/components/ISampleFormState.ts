@@ -6,4 +6,5 @@ export interface ISampleFormState{
     ManagerId:any;
     Address:any;
     Department:string;
+    Gender:string;
 }

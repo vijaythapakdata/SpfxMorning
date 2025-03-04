@@ -5,7 +5,7 @@ import { ISampleFormState } from './ISampleFormState';
 import { Web } from '@pnp/sp/webs';
 import "@pnp/sp/items";
 import "@pnp/sp/lists";
-import { Dropdown, PrimaryButton, TextField } from '@fluentui/react';
+import { ChoiceGroup, Dropdown, PrimaryButton, TextField } from '@fluentui/react';
 import {PeoplePicker,PrincipalType} from "@pnp/spfx-controls-react/lib/PeoplePicker";
 // import { escape } from '@microsoft/sp-lodash-subset';
 
@@ -19,7 +19,8 @@ export default class SampleForm extends React.Component<ISampleFormProps,ISample
       Manager:[],
       ManagerId:[],
       Address:"",
-      Department:""
+      Department:"",
+      Gender:""
     }
   }
   //Create Data
@@ -32,7 +33,8 @@ export default class SampleForm extends React.Component<ISampleFormProps,ISample
       Age:parseInt(this.state.Age),
       ManagerId:{results:this.state.ManagerId},
       Address:this.state.Address,
-      Department:this.state.Department
+      Department:this.state.Department,
+      Gender:this.state.Gender
     }).then((data)=>{
       console.log("No Error found");
       alert("data has been saved successfully");
@@ -48,7 +50,8 @@ export default class SampleForm extends React.Component<ISampleFormProps,ISample
       Manager:[],
       ManagerId:[],
       Address:"",
-      Department:""
+      Department:"",
+      Gender:""
     });
   }
 
@@ -97,6 +100,12 @@ export default class SampleForm extends React.Component<ISampleFormProps,ISample
      selectedKey={this.state.Department}
      label='Department'
      onChange={(_,Options)=>this.handleChange("Department",Options?.key as string||"")}
+     />
+     <ChoiceGroup
+     options={this.props.GenderOptions}
+     onChange={(_,options)=>this.handleChange("Gender",options?.key as string||"")}
+     selectedKey={this.state.Gender}
+     label='Gender'
      />
      <br/>
      <PrimaryButton text='Save' onClick={()=>this.createData()} iconProps={{iconName:'save'}}/>

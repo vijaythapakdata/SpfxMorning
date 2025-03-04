@@ -33,7 +33,8 @@ export default class SampleFormWebPart extends BaseClientSideWebPart<ISampleForm
         ListName:this.properties.ListName,
         siteurl:this.context.pageContext.web.absoluteUrl,
         context:this.context,
-        DepartmentOptions:await this.getChoiceValues(this.context.pageContext.web.absoluteUrl,"Department")
+        DepartmentOptions:await this.getChoiceValues(this.context.pageContext.web.absoluteUrl,"Department"),
+        GenderOptions:await this.getChoiceValues(this.context.pageContext.web.absoluteUrl,"Gender")
       }
     );
 

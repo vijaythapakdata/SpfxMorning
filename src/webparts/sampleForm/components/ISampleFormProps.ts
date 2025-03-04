@@ -5,4 +5,5 @@ siteurl:string;
 ListName:string;
 context:WebPartContext;
 DepartmentOptions:any;
+GenderOptions:any;
 }
