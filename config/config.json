@@ -25,6 +25,14 @@
           "manifest": "./src/webparts/fileUpload/FileUploadWebPart.manifest.json"
         }
       ]
+    },
+    "handling-large-list-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/handlingLargeList/HandlingLargeListWebPart.js",
+          "manifest": "./src/webparts/handlingLargeList/HandlingLargeListWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
@@ -32,6 +40,7 @@
     "FluentiUiControlsWebPartStrings": "lib/webparts/fluentiUiControls/loc/{locale}.js",
     "SampleFormWebPartStrings": "lib/webparts/sampleForm/loc/{locale}.js",
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
-    "FileUploadWebPartStrings": "lib/webparts/fileUpload/loc/{locale}.js"
+    "FileUploadWebPartStrings": "lib/webparts/fileUpload/loc/{locale}.js",
+    "HandlingLargeListWebPartStrings": "lib/webparts/handlingLargeList/loc/{locale}.js"
   }
 }
