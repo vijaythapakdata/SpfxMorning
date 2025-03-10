@@ -1,4 +1,4 @@
-import {sp} from "@pnp/sp/presets/all";
+import {ICamlQuery, sp} from "@pnp/sp/presets/all";
 import { IListItems } from "../webparts/handlingLargeList/components/IListItems";
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 export class Service{
@@ -20,4 +20,36 @@ console.error("error");
 throw err;
         }
     }
+    //Paginated Batch
+
+    public async getListItemsPaged(ListName:string):Promise<IListItems[]>{
+        const allItems:IListItems[]=[];
+        let pagedItems:any=null;
+        do{
+            const camlQuery:ICamlQuery={
+                ViewXml:`
+                <View>
+                <Query>
+                <Where>
+                <IsNotNull>
+                <FieldRef Name='Title'/>
+                </IsNotNull>
+                </Where>
+                </Query>
+                <RowLimit>1000</RowLimit>
+                <Paged>TRUE</Paged>
+                </View>
+                `
+            }
+            pagedItems=await sp.web.lists.getByTitle(ListName).getItemsByCAMLQuery(camlQuery,pagedItems?pagedItems['@odata.nextLink']:undefined);
+            console.log(`Fetched batch of ${pagedItems.length} items`);
+            allItems.push(...pagedItems.map((item:any)=>({
+                Title:item.Title
+            })));
+        }
+        while(pagedItems['@odata.nextLink']);
+        console.log(`Total items fetched : ${allItems.length}`);
+        return allItems;
+    }
+
 }
