@@ -14,7 +14,7 @@ const HandlingLargeList:React.FC<IHandlingLargeListProps>=(props)=>{
   useEffect(()=>{
     const fetchData=async()=>{
       try{
-        const result=await _service.getListItemsPaged(props.ListName);
+        const result=await _service.getPaginationItems(props.ListName);
         setListResult(result)
       }
       catch(err){

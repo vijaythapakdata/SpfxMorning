@@ -22,11 +22,41 @@ throw err;
     }
     //Paginated Batch
 
-    public async getListItemsPaged(ListName:string):Promise<IListItems[]>{
+    // public async getListItemsPaged(ListName:string):Promise<IListItems[]>{
+    //     const allItems:IListItems[]=[];
+    //     let pagedItems:any=null;
+    //     do{
+    //         const camlQuery:ICamlQuery={
+    //             ViewXml:`
+    //             <View>
+    //             <Query>
+    //             <Where>
+    //             <IsNotNull>
+    //             <FieldRef Name='Title'/>
+    //             </IsNotNull>
+    //             </Where>
+    //             </Query>
+    //             <RowLimit>2</RowLimit>
+    //             <Paged>TRUE</Paged>
+    //             </View>
+    //             `
+    //         }
+    //         const response=await sp.web.lists.getByTitle(ListName).getItemsByCAMLQuery(camlQuery,pagedItems);
+    //         console.log(`Fetched batch of ${pagedItems.length} items`);
+    //         allItems.push(...response.map((item:any)=>({
+    //             Title:item.Title
+    //         })));
+    //         pagedItems=response.ListItemCollectionPosition||null
+    //     }
+    //     while(pagedItems);
+    //     console.log(`Total items fetched : ${allItems.length}`);
+    //     return allItems;
+    // }
+    public async getPaginationItems(ListName:string):Promise<IListItems[]>{
         const allItems:IListItems[]=[];
-        let pagedItems:any=null;
+        let position:any// to store next page information
         do{
-            const camlQuery:ICamlQuery={
+            const  camlQuery:ICamlQuery={
                 ViewXml:`
                 <View>
                 <Query>
@@ -36,20 +66,23 @@ throw err;
                 </IsNotNull>
                 </Where>
                 </Query>
-                <RowLimit>1000</RowLimit>
-                <Paged>TRUE</Paged>
+                <RowLimit>2</RowLimit>
                 </View>
                 `
-            }
-            pagedItems=await sp.web.lists.getByTitle(ListName).getItemsByCAMLQuery(camlQuery,pagedItems?pagedItems['@odata.nextLink']:undefined);
-            console.log(`Fetched batch of ${pagedItems.length} items`);
-            allItems.push(...pagedItems.map((item:any)=>({
+            };
+            //Fetching items with pagination
+            const response=await sp.web.lists.getByTitle(ListName).getItemsByCAMLQuery(camlQuery,position);
+            console.log(`Fetched batch of ${response.length} items`);
+            allItems.push(...response.map((item:any)=>({
                 Title:item.Title
             })));
+
+
         }
-        while(pagedItems['@odata.nextLink']);
-        console.log(`Total items fetched : ${allItems.length}`);
-        return allItems;
+        while(position){
+            console.log(`Total items fetched ${allItems.length}`);
+            return allItems;
+        }
     }
 
 }

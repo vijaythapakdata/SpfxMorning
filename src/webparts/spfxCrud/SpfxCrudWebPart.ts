@@ -6,22 +6,32 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import * as strings from 'HandlingLargeListWebPartStrings';
-import HandlingLargeList from './components/HandlingLargeList';
-import { IHandlingLargeListProps } from './components/IHandlingLargeListProps';
+// import { IReadonlyTheme } from '@microsoft/sp-component-base';
+import {sp} from "@pnp/sp/presets/all";
+import * as strings from 'SpfxCrudWebPartStrings';
+import SpfxCrud from './components/SpfxCrud';
+import { ISpfxCrudProps } from './components/ISpfxCrudProps';
 
-export interface IHandlingLargeListWebPartProps {
-  ListName: string;
+export interface ISpfxCrudWebPartProps {
+  description: string;
 }
 
-export default class HandlingLargeListWebPart extends BaseClientSideWebPart<IHandlingLargeListWebPartProps> {
+export default class SpfxCrudWebPart extends BaseClientSideWebPart<ISpfxCrudWebPartProps> {
+
+  protected onInit(): Promise<void> {
+    return super.onInit().then(_ => {
+     sp.setup({
+      spfxContext:this.context as any
+     });
+    });
+  }
+
   public render(): void {
-    const element: React.ReactElement<IHandlingLargeListProps> = React.createElement(
-      HandlingLargeList,
+    const element: React.ReactElement<ISpfxCrudProps> = React.createElement(
+      SpfxCrud,
       {
-        context:this.context,
-        siteurl:this.context.pageContext.web.absoluteUrl,
-        ListName:this.properties.ListName
+        description: this.properties.description,
+        context:this.context
       }
     );
 
@@ -46,8 +56,8 @@ export default class HandlingLargeListWebPart extends BaseClientSideWebPart<IHan
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('ListName', {
-                  label: strings.ListFieldLabel
+                PropertyPaneTextField('description', {
+                  label: strings.DescriptionFieldLabel
                 })
               ]
             }

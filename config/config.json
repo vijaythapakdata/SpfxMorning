@@ -33,6 +33,14 @@
           "manifest": "./src/webparts/handlingLargeList/HandlingLargeListWebPart.manifest.json"
         }
       ]
+    },
+    "spfx-crud-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spfxCrud/SpfxCrudWebPart.js",
+          "manifest": "./src/webparts/spfxCrud/SpfxCrudWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
@@ -41,6 +49,7 @@
     "SampleFormWebPartStrings": "lib/webparts/sampleForm/loc/{locale}.js",
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
     "FileUploadWebPartStrings": "lib/webparts/fileUpload/loc/{locale}.js",
-    "HandlingLargeListWebPartStrings": "lib/webparts/handlingLargeList/loc/{locale}.js"
+    "HandlingLargeListWebPartStrings": "lib/webparts/handlingLargeList/loc/{locale}.js",
+    "SpfxCrudWebPartStrings": "lib/webparts/spfxCrud/loc/{locale}.js"
   }
 }
